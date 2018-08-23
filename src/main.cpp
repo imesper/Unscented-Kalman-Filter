@@ -77,7 +77,6 @@ int main()
           		iss >> timestamp;
           		meas_package.timestamp_ = timestamp;
           } else if (sensor_type.compare("R") == 0) {
-
       	  		meas_package.sensor_type_ = MeasurementPackage::RADAR;
           		meas_package.raw_measurements_ = VectorXd(3);
           		float ro;
@@ -86,7 +85,7 @@ int main()
           		iss >> ro;
           		iss >> theta;
           		iss >> ro_dot;
-          		meas_package.raw_measurements_ << ro,theta, ro_dot;
+                meas_package.raw_measurements_ << ro, theta, ro_dot;
           		iss >> timestamp;
           		meas_package.timestamp_ = timestamp;
           }
@@ -169,9 +168,13 @@ int main()
     std::cout << "Connected!!!" << std::endl;
   });
 
-  h.onDisconnection([&h](uWS::WebSocket<uWS::SERVER> ws, int code, char *message, size_t length) {
+  h.onDisconnection([&ukf,&h](uWS::WebSocket<uWS::SERVER> ws, int code, char *message, size_t length) {
     ws.close();
+
     std::cout << "Disconnected" << std::endl;
+
+
+
   });
 
   int port = 4567;
@@ -185,6 +188,7 @@ int main()
     return -1;
   }
   h.run();
+     ukf.writeToFile();
 }
 
 

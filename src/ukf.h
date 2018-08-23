@@ -31,6 +31,10 @@ public:
   ///* predicted sigma points matrix
   MatrixXd Xsig_pred_;
 
+  std::vector<double> las_nis_;
+
+  std::vector<double> rad_nis_;
+
   ///* time when the state is true, in us
   long long time_us_;
 
@@ -58,6 +62,7 @@ public:
   ///* Weights of sigma points
   VectorXd weights_;
 
+
   ///* State dimension
   int n_x_;
 
@@ -66,8 +71,8 @@ public:
 
   ///* Sigma point spreading parameter
   double lambda_;
-
-
+  ///* Number of sigma points
+  int n_sig_pts_;
   /**
    * Constructor
    */
@@ -102,6 +107,10 @@ public:
    * @param meas_package The measurement at k+1
    */
   void UpdateRadar(MeasurementPackage meas_package);
+  void AugmentedSigmaPoints(MatrixXd *Xsig_out);
+  void PredictRadarMeasurement(VectorXd *z_out, MatrixXd *Zsig_out,  MatrixXd *S_out);
+  void PredictLidarMeasurement(VectorXd *z_out, MatrixXd *Zsig_out, MatrixXd *S_out);
+  void writeToFile() const;
 };
 
 #endif /* UKF_H */
